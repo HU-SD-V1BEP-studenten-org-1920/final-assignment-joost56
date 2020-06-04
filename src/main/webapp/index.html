@@ -13,29 +13,27 @@
     <li><a href="rest/eigenaar/2">eigenaren met id 2</a></li>
 </ul>
 <h2>via POST:</h2>
-<h3>Customer creation</h3>
-<form id="POSTcustomerForm">
-    <label for="naam">naam<input type="text" id="naam" naam="naam"/></label>
+<h3>Eigenaar creation</h3>
+<form id="POSTeigenaarForm">
+    <label for="name">Eigenaar name:<input type="text" id="name" name="name"/></label>
     <input type="button" id="postNoJackson" value="JobPost!"/>
     <input type="button" id="postJackson" value="JacksonPost!"/>
 </form>
 
-<h2>via PUT:</h2>
-<h3>Eigenaar modification</h3>
-<form id="PUTeigenaarForm">
-    <label for="putid"> Eigenaar id:<input type="text" id="putid" name="id"/></label>
-    <label for="putname"> Eigenaar naam<input type="text" id="putname" name="name"/></label>
-    <input type="button" id="put" value="Put!"/>
-</form>
+<!--<h2>via PUT:</h2>-->
+<!--<h3>Eigenaar modification</h3>-->
+<!--<form id="PUTeigenaarForm">-->
+<!--    <label for="putid"> Eigenaar id:<input type="text" id="putid" name="id"/></label>-->
+<!--    <label for="putname"> Eigenaar name<input type="text" id="putname" name="name"/></label>-->
+<!--    <input type="button" id="put" value="Put!"/>-->
+<!--</form>-->
 
-<h2>Login</h2>
-<form id="loginform">
-    <input type="text" name="username" />
-    <input type="password" name="password" />
-    <input type="button" value="login" id="login"/>
-</form>
-
-
+<!--<h2>Login</h2>-->
+<!--<form id="loginform">-->
+<!--    <input type="text" name="username" />-->
+<!--    <input type="password" name="password" />-->
+<!--    <input type="button" value="login" id="login"/>-->
+<!--</form>-->
 
 
 
@@ -62,19 +60,43 @@
                 console.log(myJson);
 
             });
-        document.querySelector("#put").addEventListener("click", function () {
-            var id = document.querySelector("#putid").value;
-            var formData = new FormData(document.querySelector("#PUTEigenaarsForm"));
-            var encData = new URLSearchParams(formData.entries());
-
-            fetch("rest/eigenaar/" + {method: 'PUT', body: encData})
-                .then(response => response.json())
-                .then(function (myJson) {
-                    console.log(myJson);
-
-                });
-        });
     });
+
+    document.querySelector("#postNoJackson").addEventListener("click", function() {
+        var formData = new FormData(document.querySelector("#POSTAquariaForm"));
+        var encData = new URLSearchParams(formData.entries());
+
+        fetch("rest/aquaria/nojackson", {method: 'POST', body: encData})
+            .then(response => response.json())
+            .then(function (myJson) {
+                console.log(myJson)
+            })
+    })
+    document.querySelector("#postJackson").addEventListener("click", function () {
+        var formData = new FormData(document.querySelector("#POSTaquariaForm"));
+        var encData = new URLSearchParams(formData.entries());
+
+        fetch("rest/aquaria/jackson", {method: 'POST', body: encData})
+            .then(response => response.json())
+            .then(function (myJson) {
+                console.log(myJson);
+
+            });
+    });
+
+    // document.querySelector("#put").addEventListener("click", function () {
+    //     var id = document.querySelector("#putid").value;
+    //     var formData = new FormData(document.querySelector("#PUTEigenaarsForm"));
+    //     var encData = new URLSearchParams(formData.entries());
+    //
+    //     fetch("rest/eigenaar/"+id, {method: 'PUT', body: encData})
+    //         .then(response => response.json())
+    //         .then(function (myJson) {
+    //             console.log(myJson);
+    //
+    //         });
+    //
+    // });
 </script>
 </body>
 </html>

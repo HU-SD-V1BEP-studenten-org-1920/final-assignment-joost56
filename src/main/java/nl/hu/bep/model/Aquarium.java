@@ -1,5 +1,8 @@
 package nl.hu.bep.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Aquarium {
     private String naam;
     private double lengte;
@@ -7,6 +10,8 @@ public class Aquarium {
     private double hoogte;
     private String bodemsoort;
     private String watersoort;
+    private static List<Aquarium> eigenAquaria = new ArrayList<>();
+    private static List<Aquarium> alleAquaria = new ArrayList<>();
 
     public Aquarium(String naam, double lengte, double breedte, double hoogte, String bodemsoort, String watersoort) {
         this.naam = naam;
@@ -15,12 +20,19 @@ public class Aquarium {
         this.hoogte = hoogte;
         this.bodemsoort = bodemsoort;
         this.watersoort = watersoort;
+        alleAquaria.add(this);
 
     }
 
-    public String getNaam() {
-        return naam;
+    public static Aquarium createAquarium(String naam, double lengte, double breedte, double hoogte, String bodemsoort, String watersoort) {
+            return new Aquarium(naam, lengte, breedte, hoogte, bodemsoort, watersoort);
+        }
+
+    public static List<Aquarium> getAlleAquaria(){
+        return alleAquaria;
     }
+
+
 
     public void setNaam(String naam) {
         this.naam = naam;
@@ -66,6 +78,7 @@ public class Aquarium {
         this.watersoort = watersoort;
     }
 
-
-
+    public String getNaam() {
+        return naam;
+    }
 }

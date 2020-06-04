@@ -18,7 +18,7 @@ public class EigenaarsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Eigenaar>  getEigenaars(){
+    public List<Eigenaar> getEigenaars(){
         return Eigenaar.getAlleEigenaren();
     }
 
@@ -26,11 +26,11 @@ public class EigenaarsResource {
     @Path("nojackson")
     @Produces(MediaType.APPLICATION_JSON)
     public String createEigenaarOld(@FormParam("name") String nm){
-        Eigenaar newEigenaar = Eigenaar.createEigenaar(nm);
+        Eigenaar newEigenaar  = Eigenaar.createEigenaar(nm);
         JsonObjectBuilder job = Json.createObjectBuilder();
         if (newEigenaar != null) {
             job.add("id", newEigenaar.getId());
-            job.add("naam", newEigenaar.getnaam());
+            job.add("name", newEigenaar.getname());
         }else{
             job.add("error", "klant is niet gemaakt");
         }
@@ -46,6 +46,6 @@ public class EigenaarsResource {
             return Response.status(Response.Status.CONFLICT).entity(new AbstractMap.SimpleEntry<>("result", "Eigenaar bestaat al")).build();
         }
         return Response.ok(newEigenaar).build();
-        }
+    }
     }
 
