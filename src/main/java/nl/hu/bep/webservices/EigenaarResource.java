@@ -58,7 +58,7 @@ public class EigenaarResource {
     @Path("{eigenaarid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteEigenaar(@PathParam("eigenaarid") int id){
-        if (!Eigenaar.removeEigenaar(id)) return Response.ok().build();
+        if (Eigenaar.removeEigenaar(id)) return Response.ok().build();
         return Response.status(Response.Status.NOT_FOUND).build();
 
     }

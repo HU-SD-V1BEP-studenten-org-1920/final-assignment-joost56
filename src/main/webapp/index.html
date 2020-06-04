@@ -5,12 +5,16 @@
     <title>Placeholder startpagina</title>
 </head>
 <body>
-<h1>our readily available services</h1>
-<h2>via GET:</h2>
+<h1>Welkom bij AquariumManager</h1>
+<h2>Voor een eigenaar</h2>
 <ul>
-    <li><a href="rest/eigenaren">Alle eigenaren</a> </li>
-    <li><a href="rest/eigenaar/1">eigenaren met id 1 </a></li>
-    <li><a href="rest/eigenaar/2">eigenaren met id 2</a></li>
+    <li><a href="rest/eigenaren">Bekijk eigen aquaria</a> </li>
+    <li><a href="rest/eigenaar/1">Voeg bewoner toe</a></li>
+    <li><a href="rest/eigenaar/2">Voeg toebehoren toe</a></li>
+    <li><a href="rest/eigenaar/2">Voeg aquarium toe</a></li>
+    <li><a href="rest/eigenaar/2">Verwijder aquarium</a></li>
+    <li><a href="rest/eigenaar/2">Log uit</a></li>
+
 </ul>
 
 
@@ -100,6 +104,7 @@
 
             });
     });
+
 //showt de aquaria
     document.querySelector("#postNoJackson").addEventListener("click", function() {
         var formData = new FormData(document.querySelector("#POSTAquariaForm"));
@@ -136,6 +141,7 @@
             });
     });
 
+
     document.querySelector("#patch").addEventListener("click", function() {
         var id = document.querySelector("#patchid").value;
         var formData = new FormData(document.querySelector("#PATCHeigenaarForm"));
@@ -148,10 +154,12 @@
             });
     });
 
+
+    //verwijderd een eigenaar
     document.querySelector("#delete").addEventListener("click", function() {
         var id = document.querySelector("#deleteid").value;
 
-        fetch("rest/eigenaar/" +id, {method: 'DELETE', body: encData})
+        fetch("rest/eigenaar/" +id, {method: 'DELETE'})
             .then(function (response) {
                 if (response.ok) console.log("customer deleted")
                 else if (response.status==404) console.log("customer not found")

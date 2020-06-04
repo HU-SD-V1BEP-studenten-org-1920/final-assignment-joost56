@@ -1,6 +1,7 @@
 package nl.hu.bep.webservices;
 
 import com.azure.core.annotation.Post;
+import nl.hu.bep.model.Aquarium;
 import nl.hu.bep.model.Eigenaar;
 
 import javax.json.Json;
@@ -18,8 +19,8 @@ public class EigenaarsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Eigenaar> getEigenaren(){
-        return Eigenaar.getAlleEigenaren();
+    public List<Aquarium> getAquaria(){
+        return Aquarium.getAlleAquaria();
     }
 
     @POST
