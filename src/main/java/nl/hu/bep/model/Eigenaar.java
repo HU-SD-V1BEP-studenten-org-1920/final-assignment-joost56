@@ -15,21 +15,21 @@ public class Eigenaar {
     private Eigenaar(String nm) {
         name = nm;
         id = ++numCustomers;
-        alleEigenaren.add(this);
+        alleEigenaren.add(this); //moet mogelijk weg
     }
 
-//    public Eigenaar(String nm, int id) {
-//        this.name = nm;
-//        this.id = id;
-//    }
+    public Eigenaar(String nm, int id) {
+        this.name = nm;
+        this.id = id;
+    }
 
     public static List<Eigenaar> getAlleEigenaren(){
         return alleEigenaren;
     }
 
-//    public static void setAlleEigenaren(List<Eigenaar> alleEigenaren) {
-//        Eigenaar.alleEigenaren = alleEigenaren;
-//    }
+    public static void setAlleEigenaren(List<Eigenaar> alleEigenaren) {
+        Eigenaar.alleEigenaren = alleEigenaren;
+    }
 
     public static Eigenaar getEigenaar(int id){
         return alleEigenaren.stream().filter(e->e.id==id).findFirst().orElse(null);
@@ -37,31 +37,33 @@ public class Eigenaar {
 
     public static Eigenaar createEigenaar(String name) {
             if (alleEigenaren.stream().noneMatch(e -> e.getname().equals(name))) {
-                return new Eigenaar(name);
+                Eigenaar newEigenaar = new Eigenaar(name);
+                alleEigenaren.add(newEigenaar);
+                return newEigenaar;
             }
-            return null;
+            else return null;
     }
 
-//    public static Eigenaar updateEigenaarName(int id, String name){
-//        Eigenaar found = Eigenaar.getEigenaar(id);
-//        if (found!=null) {
-//            found.setname(name != null ? name : "");
-//        }
-//        return found;
-//    }
+    public static Eigenaar updateEigenaarName(int id, String name){
+        Eigenaar found = Eigenaar.getEigenaar(id);
+        if (found!=null) {
+            found.setname(name != null ? name : "");
+        }
+        return found;
+    }
 
-//    public static Eigenaar updateEigenaar(Eigenaar newEigenaar){
-//        return alleEigenaren.set(alleEigenaren.indexOf(Eigenaar.getEigenaar(newEigenaar.getId())),newEigenaar);
-//    }
+    public static Eigenaar updateEigenaar(Eigenaar newEig){
+        return alleEigenaren.set(alleEigenaren.indexOf(Eigenaar.getEigenaar(newEig.getId())),newEig);
+    }
 
     public static boolean removeEigenaar(int id){
         if (id>0) return alleEigenaren.remove(alleEigenaren.indexOf(Eigenaar.getEigenaar(id))) != null;
         return false;
     }
 
-//    public void setname(String nm) {
-//        this.name = nm;
-//    }
+    public void setname(String nm) {
+        this.name = nm;
+    }
 
 
     public String getname() {

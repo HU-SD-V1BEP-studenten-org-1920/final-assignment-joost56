@@ -18,7 +18,7 @@ public class EigenaarsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Eigenaar> getEigenaars(){
+    public List<Eigenaar> getEigenaren(){
         return Eigenaar.getAlleEigenaren();
     }
 
@@ -32,7 +32,7 @@ public class EigenaarsResource {
             job.add("id", newEigenaar.getId());
             job.add("name", newEigenaar.getname());
         }else{
-            job.add("error", "klant is niet gemaakt");
+            job.add("error", "eigenaar is niet gemaakt");
         }
         return job.build().toString();
     }

@@ -5,11 +5,16 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 
+import javax.annotation.Priority;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
+@Provider
+@Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestCtx) throws IOException {
@@ -33,6 +38,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 System.out.println("invalid JWT, processing as guest!");
             }
         }
+        requestCtx.setSecurityContext(msc);
 
     }
 }

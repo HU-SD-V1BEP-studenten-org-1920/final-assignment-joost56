@@ -31,4 +31,11 @@ public class MyUser implements Principal {
     public static MyUser getUserByName(String uname){
         return allMyUsers.stream().filter(e->e.username.equals(uname)).findFirst().orElse(null);
     }
+
+    public static String validateLogin(String username, String password){
+        MyUser found = getUserByName(username);
+        if (found != null) return password.equals(found.plainpassword) ? found.getRole(): null;
+        return null;
+
+    }
 }

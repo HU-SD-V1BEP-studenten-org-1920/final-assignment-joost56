@@ -12,46 +12,85 @@
     <li><a href="rest/eigenaar/1">eigenaren met id 1 </a></li>
     <li><a href="rest/eigenaar/2">eigenaren met id 2</a></li>
 </ul>
+
+
 <h2>via POST:</h2>
 <h3>Eigenaar creation</h3>
 <form id="POSTeigenaarForm">
-    <label for="name">Eigenaar name:<input type="text" id="name" name="name"/></label>
+    <label for="eigenaarname">Eigenaar name:<input type="text" id="eigenaarname" name="name"/></label>
     <input type="button" id="postNoJackson" value="JobPost!"/>
     <input type="button" id="postJackson" value="JacksonPost!"/>
 </form>
 
-<!--<h2>via PUT:</h2>-->
-<!--<h3>Eigenaar modification</h3>-->
-<!--<form id="PUTeigenaarForm">-->
-<!--    <label for="putid"> Eigenaar id:<input type="text" id="putid" name="id"/></label>-->
-<!--    <label for="putname"> Eigenaar name<input type="text" id="putname" name="name"/></label>-->
-<!--    <input type="button" id="put" value="Put!"/>-->
-<!--</form>-->
 
-<!--<h2>Login</h2>-->
-<!--<form id="loginform">-->
-<!--    <input type="text" name="username" />-->
-<!--    <input type="password" name="password" />-->
-<!--    <input type="button" value="login" id="login"/>-->
-<!--</form>-->
+<h2>via PUT:</h2>
+<h3>Eigenaar modification</h3>
+<form id="PUTeigenaarForm">
+    <label for="putid">Eigenaar id:<input type="text" id="putid" name="id"/></label>
+    <label for="putname">Eigenaar name:<input type="text" id="putname" name="name"/></label>
+    <input type="button" id="put" value="Put!"/>
+</form>
+
+<h2>via PATCH:</h2>
+<h3>Eigenaar modification</h3>
+<form id="PATCHeigenaarForm">
+    <label for="patchid">Eigenaar id:<input type="text" id="patchid" name="id"/></label>
+    <label for="patchname">Eigenaar name:<input type="text" id="patchname" name="name"/></label>
+    <input type="button" id="patch" value="Patch!"/>
+</form>
+
+<h2>via DELETE:</h2>
+<h3>Eigenaar modification</h3>
+<form id="DELETEeigenaarForm">
+    <label for="deleteid"> Eigenaar id:<input type="text" id="deleteid" name="id"/></label>
+    <input type="button" id="delete" value="Delete!"/>
+</form>
 
 
+<h2>Login</h2>
+<form id="loginform">
+    <input type="text" name="username" />
+    <input type="password" name="password" />
+    <input type="button" value="login" id="login"/>
+</form>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 
 
 <script type="text/javascript">
+    // loginform
+    function login(event) {
+        var formData = new FormData(document.querySelector("#loginform"));
+        var encData = new URLSearchParams(formData.entries());
+
+        fetch("rest/authentication", { method: 'POST', body: encData })
+            .then(function (response) {
+                if (response.ok)
+                    return response.json();
+                else throw "wrong username/password";
+            })
+            .then(myJson => window.sessionStorage.setItem("myJWT", myJson.JWT))
+            .catch(error => console.log(error));
+    }
+    document.querySelector("#login").addEventListener("click", login);
+
+
+//showt alle eigenaren
     document.querySelector("#postNoJackson").addEventListener("click", function() {
-        var formData = new FormData(document.querySelector("#POSTEigenaarsForm"));
+        var formData = new FormData(document.querySelector("#POSTeigenaarForm"));
         var encData = new URLSearchParams(formData.entries());
 
         fetch("rest/eigenaren/nojackson", {method: 'POST', body: encData})
             .then(response => response.json())
             .then(function (myJson) {
                 console.log(myJson)
-            })
-    })
+            });
+    });
     document.querySelector("#postJackson").addEventListener("click", function () {
-        var formData = new FormData(document.querySelector("#POSTEigenaarsForm"));
+        var formData = new FormData(document.querySelector("#POSTeigenaarForm"));
         var encData = new URLSearchParams(formData.entries());
 
         fetch("rest/eigenaren/jackson", {method: 'POST', body: encData})
@@ -61,7 +100,7 @@
 
             });
     });
-
+//showt de aquaria
     document.querySelector("#postNoJackson").addEventListener("click", function() {
         var formData = new FormData(document.querySelector("#POSTAquariaForm"));
         var encData = new URLSearchParams(formData.entries());
@@ -84,19 +123,46 @@
             });
     });
 
-    // document.querySelector("#put").addEventListener("click", function () {
-    //     var id = document.querySelector("#putid").value;
-    //     var formData = new FormData(document.querySelector("#PUTEigenaarsForm"));
-    //     var encData = new URLSearchParams(formData.entries());
-    //
-    //     fetch("rest/eigenaar/"+id, {method: 'PUT', body: encData})
-    //         .then(response => response.json())
-    //         .then(function (myJson) {
-    //             console.log(myJson);
-    //
-    //         });
-    //
-    // });
+    //wijzigt de eigenaar
+    document.querySelector("#put").addEventListener("click", function() {
+        var id = document.querySelector("#putid").value;
+        var formData = new FormData(document.querySelector("#PUTeigenaarForm"));
+        var encData = new URLSearchParams(formData.entries());
+
+        fetch("rest/eigenaar/" +id, {method: 'PUT', body: encData})
+            .then(response => response.json())
+            .then(function (myJson) {
+                console.log(myJson);
+            });
+    });
+
+    document.querySelector("#patch").addEventListener("click", function() {
+        var id = document.querySelector("#patchid").value;
+        var formData = new FormData(document.querySelector("#PATCHeigenaarForm"));
+        var encData = new URLSearchParams(formData.entries());
+
+        fetch("rest/eigenaar/" +id, {method: 'PATCH', body: encData})
+            .then(response => response.json())
+            .then(function (myJson) {
+                console.log(myJson);
+            });
+    });
+
+    document.querySelector("#delete").addEventListener("click", function() {
+        var id = document.querySelector("#deleteid").value;
+
+        fetch("rest/eigenaar/" +id, {method: 'DELETE', body: encData})
+            .then(function (response) {
+                if (response.ok) console.log("customer deleted")
+                else if (response.status==404) console.log("customer not found")
+                else console.log("something else happened")
+            });
+    });
+
+
+
+
+
 </script>
 </body>
 </html>

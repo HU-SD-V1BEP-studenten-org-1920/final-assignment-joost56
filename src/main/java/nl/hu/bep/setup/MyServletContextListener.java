@@ -2,6 +2,7 @@ package nl.hu.bep.setup;
 
 import nl.hu.bep.model.Aquarium;
 import nl.hu.bep.model.Eigenaar;
+import nl.hu.bep.security.MyUser;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -16,6 +17,8 @@ public class MyServletContextListener implements ServletContextListener {
         Eigenaar.createEigenaar("joost");
         Eigenaar.createEigenaar("Casper");
         Aquarium.createAquarium("Nemo", 100, 100, 100, "bodemsoort" ,  "zoutwater");
+        new MyUser("Joost", "geheim").setAdmin();
+        new MyUser("Casper", "ookgeheim");
     }
 
     public void contextDestroyed(ServletContextEvent sce){
