@@ -12,6 +12,7 @@ import java.awt.*;
 import java.security.Key;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Calendar;
+import javax.ws.rs.Path;
 
 @Path("/authentication")
 public class AuthenticationResource {

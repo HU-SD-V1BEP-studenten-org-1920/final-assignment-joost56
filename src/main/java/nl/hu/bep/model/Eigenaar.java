@@ -12,10 +12,11 @@ public class Eigenaar {
     private static int numCustomers = 0;
     private static List<Aquarium> eigenAquaria = new ArrayList<>();
 
+
     private Eigenaar(String nm) {
         name = nm;
         id = ++numCustomers;
-        alleEigenaren.add(this); //moet mogelijk weg
+
     }
 
     public Eigenaar(String nm, int id) {

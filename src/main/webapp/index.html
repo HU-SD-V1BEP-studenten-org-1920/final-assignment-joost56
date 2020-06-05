@@ -6,56 +6,73 @@
 </head>
 <body>
 <h1>Welkom bij AquariumManager</h1>
+
+<!--Inlog-->
+<h2>Login</h2>
+<form id="loginform">
+    <label>
+        <input type="text" name="username" />
+    </label>
+    <label>
+        <input type="password" name="password" />
+    </label>
+    <input type="button" value="login" id="login"/>
+</form>
+
+<!--functies bedoeld voor een eigenaar-->
 <h2>Voor een eigenaar</h2>
-<ul>
-    <li><a href="rest/eigenaren">Bekijk eigen aquaria</a> </li>
-    <li><a href="rest/eigenaar/1">Voeg bewoner toe</a></li>
-    <li><a href="rest/eigenaar/2">Voeg toebehoren toe</a></li>
-    <li><a href="rest/eigenaar/2">Voeg aquarium toe</a></li>
-    <li><a href="rest/eigenaar/2">Verwijder aquarium</a></li>
-    <li><a href="rest/eigenaar/2">Log uit</a></li>
-
-</ul>
+    <li><a href="rest/aquaria">Bekijk eigen aquaria</a> </li>
 
 
-<h2>via POST:</h2>
-<h3>Eigenaar creation</h3>
-<form id="POSTeigenaarForm">
-    <label for="eigenaarname">Eigenaar name:<input type="text" id="eigenaarname" name="name"/></label>
-    <input type="button" id="postNoJackson" value="JobPost!"/>
-    <input type="button" id="postJackson" value="JacksonPost!"/>
+<h3>Aquarium verwijderen</h3>
+<form id="DELETEaquariumForm">
+    <label for="deletenaam"> Aquarium id:<input type="text" id="deletenaam" name="naam"/></label>
+    <input type="button" id="deletename" value="Delete!"/>
 </form>
 
 
-<h2>via PUT:</h2>
-<h3>Eigenaar modification</h3>
+<h3>Aquarium maken</h3>
+<form id="POSTAquariumForm">
+    <label for="aquariumname">aquarium naam:<input type="text" id="aquariumname" name="name"/></label><br>
+    <label for="aquariumlengte">aquarium lengte:<input type="number" id="aquariumlengte" name="lengte"/></label><br>
+    <label for="aquariumbreedte">aquarium breedte:<input type="number" id="aquariumbreedte" name="breedte"/></label><br>
+    <label for="aquariumhoogte">aquarium hoogte:<input type="number" id="aquariumhoogte" name="hoogte"/></label><br>
+    <label for="aquariumbodemsoort">aquarium bodemsoort:<input type="text" id="aquariumbodemsoort" name="bodemsoort"/></label><br>
+    <label for="aquariumwatersoort">aquarium watersoort:  <input type="text" id="aquariumwatersoort" name="watersoort"/></label>
+
+    <input type="button" id="postNoJackson" value="Voeg toe"/>
+    <input type="button" id="postJackson" value="Voeg toe"/>
+</form>
+
+
+<!--functies bedoeld voor een admin-->
+<h2>voor een admin</h2>
+
+<li><a href="rest/aquaria">Bekijk alle aquaria</a> </li>
+<li><a href="rest/eigenaren">Bekijk alle eigenaren</a> </li>
+
+
+<!--eigenaar aanpassen met put-->
+<h3>Eigenaar aanpassen</h3>
 <form id="PUTeigenaarForm">
     <label for="putid">Eigenaar id:<input type="text" id="putid" name="id"/></label>
     <label for="putname">Eigenaar name:<input type="text" id="putname" name="name"/></label>
     <input type="button" id="put" value="Put!"/>
 </form>
 
-<h2>via PATCH:</h2>
-<h3>Eigenaar modification</h3>
+<!--eigenaar aanpassen met patch-->
+<h3>Eigenaar aanpassen</h3>
 <form id="PATCHeigenaarForm">
     <label for="patchid">Eigenaar id:<input type="text" id="patchid" name="id"/></label>
     <label for="patchname">Eigenaar name:<input type="text" id="patchname" name="name"/></label>
-    <input type="button" id="patch" value="Patch!"/>
+    <input type="button" id="pas aan" value="pas aan"/>
 </form>
 
-<h2>via DELETE:</h2>
-<h3>Eigenaar modification</h3>
+<!--eigenaar verwijderen werkt alleen voor een admin-->
+<h3>Eigenaar verwijderen</h3>
 <form id="DELETEeigenaarForm">
     <label for="deleteid"> Eigenaar id:<input type="text" id="deleteid" name="id"/></label>
     <input type="button" id="delete" value="Delete!"/>
-</form>
-
-
-<h2>Login</h2>
-<form id="loginform">
-    <input type="text" name="username" />
-    <input type="password" name="password" />
-    <input type="button" value="login" id="login"/>
 </form>
 
 
@@ -72,8 +89,7 @@
 
         fetch("rest/authentication", { method: 'POST', body: encData })
             .then(function (response) {
-                if (response.ok)
-                    return response.json();
+                if (response.ok) return response.json();
                 else throw "wrong username/password";
             })
             .then(myJson => window.sessionStorage.setItem("myJWT", myJson.JWT))
@@ -82,72 +98,110 @@
     document.querySelector("#login").addEventListener("click", login);
 
 
+    //verwijderd een aquarium
+    document.querySelector("#delete").addEventListener("click", function() {
+        var id = document.querySelector("#deleteid").value;
+        var fetchoptions = {
+            method: 'DELETE',
+            headers : {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            }
+        }
+
+        fetch("rest/aquarium/" +id, fetchoptions)
+            .then(function (response) {
+                if (response.ok) {
+                    console.log("aquarium deleted")
+                }
+                else if (response.status==404) {
+                    console.log("aquarium not found")
+                }
+                else if (response.status==403) {
+                    console.log("forbidden")
+                }
+            }).catch(error => console.log(error))
+    });
+
+
+
+
+
 //showt alle eigenaren
     document.querySelector("#postNoJackson").addEventListener("click", function() {
-        var formData = new FormData(document.querySelector("#POSTeigenaarForm"));
+        var formData = new FormData(document.querySelector("#GETeigenaarForm"));
         var encData = new URLSearchParams(formData.entries());
+        var fetchoptions = {
+            method: 'GET',
+            headers : {
+                'Authorization' : 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            },
+            body: encData
+        }
 
-        fetch("rest/eigenaren/nojackson", {method: 'POST', body: encData})
+        fetch("rest/eigenaren/nojackson", fetchoptions)
             .then(response => response.json())
             .then(function (myJson) {
                 console.log(myJson)
             });
     });
-    document.querySelector("#postJackson").addEventListener("click", function () {
-        var formData = new FormData(document.querySelector("#POSTeigenaarForm"));
-        var encData = new URLSearchParams(formData.entries());
 
-        fetch("rest/eigenaren/jackson", {method: 'POST', body: encData})
-            .then(response => response.json())
-            .then(function (myJson) {
-                console.log(myJson);
-
-            });
-    });
 
 //showt de aquaria
     document.querySelector("#postNoJackson").addEventListener("click", function() {
         var formData = new FormData(document.querySelector("#POSTAquariaForm"));
         var encData = new URLSearchParams(formData.entries());
+        var fetchoptions = {
+            method: 'GET',
+            headers : {
+                'Authorization' : 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            },
+            body: encData
+        }
 
-        fetch("rest/aquaria/nojackson", {method: 'POST', body: encData})
+        fetch("rest/aquaria/nojackson", fetchoptions)
             .then(response => response.json())
             .then(function (myJson) {
                 console.log(myJson)
             })
-    })
-    document.querySelector("#postJackson").addEventListener("click", function () {
-        var formData = new FormData(document.querySelector("#POSTaquariaForm"));
-        var encData = new URLSearchParams(formData.entries());
-
-        fetch("rest/aquaria/jackson", {method: 'POST', body: encData})
-            .then(response => response.json())
-            .then(function (myJson) {
-                console.log(myJson);
-
-            });
     });
+
+
+
 
     //wijzigt de eigenaar
     document.querySelector("#put").addEventListener("click", function() {
         var id = document.querySelector("#putid").value;
         var formData = new FormData(document.querySelector("#PUTeigenaarForm"));
         var encData = new URLSearchParams(formData.entries());
+        var fetchoptions = {
+            method: 'PUT',
+            headers : {
+                'Authorization' : 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            },
+            body: encData
+        }
 
-        fetch("rest/eigenaar/" +id, {method: 'PUT', body: encData})
+        fetch("rest/eigenaar/" +id, fetchoptions)
             .then(response => response.json())
             .then(function (myJson) {
                 console.log(myJson);
             });
     });
 
-
+    // wijzigt de eigenaar
     document.querySelector("#patch").addEventListener("click", function() {
         var id = document.querySelector("#patchid").value;
         var formData = new FormData(document.querySelector("#PATCHeigenaarForm"));
         var encData = new URLSearchParams(formData.entries());
+        var fetchoptions = {
+            method: 'PATCH',
+            headers : {
+                'Authorization' : 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            },
+            body: encData
+        }
 
-        fetch("rest/eigenaar/" +id, {method: 'PATCH', body: encData})
+        fetch("rest/eigenaar/" +id, fetchoptions)
             .then(response => response.json())
             .then(function (myJson) {
                 console.log(myJson);
@@ -158,17 +212,26 @@
     //verwijderd een eigenaar
     document.querySelector("#delete").addEventListener("click", function() {
         var id = document.querySelector("#deleteid").value;
+        var fetchoptions = {
+            method: 'DELETE',
+            headers : {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem("myJWT")
+            }
+        }
 
-        fetch("rest/eigenaar/" +id, {method: 'DELETE'})
+        fetch("rest/eigenaar/" +id, fetchoptions)
             .then(function (response) {
-                if (response.ok) console.log("customer deleted")
-                else if (response.status==404) console.log("customer not found")
-                else console.log("something else happened")
-            });
+                if (response.ok) {
+                    console.log("customer deleted")
+                }
+                else if (response.status==404) {
+                    console.log("customer not found")
+                }
+                else if (response.status==403) {
+                    console.log("forbidden")
+                }
+            }).catch(error => console.log(error))
     });
-
-
-
 
 
 </script>

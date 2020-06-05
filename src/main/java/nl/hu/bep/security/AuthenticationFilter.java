@@ -27,7 +27,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             String token = authHeader.substring("Bearer".length()).trim();
 
             try {
-
                 JwtParser parser = Jwts.parser().setSigningKey(AuthenticationResource.key);
                 Claims claims = parser.parseClaimsJws(token).getBody();
 

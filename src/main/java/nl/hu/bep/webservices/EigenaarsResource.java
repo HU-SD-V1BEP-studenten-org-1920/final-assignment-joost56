@@ -4,6 +4,7 @@ import com.azure.core.annotation.Post;
 import nl.hu.bep.model.Aquarium;
 import nl.hu.bep.model.Eigenaar;
 
+import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -19,8 +20,8 @@ public class EigenaarsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Aquarium> getAquaria(){
-        return Aquarium.getAlleAquaria();
+    public List<Eigenaar> getEigenaren(){
+        return Eigenaar.getAlleEigenaren();
     }
 
     @POST

@@ -17,8 +17,10 @@ public class MyServletContextListener implements ServletContextListener {
         Eigenaar.createEigenaar("joost");
         Eigenaar.createEigenaar("Casper");
         Aquarium.createAquarium("Nemo", 100, 100, 100, "bodemsoort" ,  "zoutwater");
-        new MyUser("Joost", "geheim").setAdmin();
-        new MyUser("Casper", "ookgeheim");
+        new MyUser("joost", "geheim").setAdmin();
+        new MyUser("casper", "geheimer");
+        new MyUser("floris", "123").setEigenaar();
+        Eigenaar.getAlleEigenaren().forEach(System.out::println);
     }
 
     public void contextDestroyed(ServletContextEvent sce){
