@@ -7,22 +7,16 @@
 <body>
 <h1>Welkom bij AquariumManager</h1>
 
-<!--Inlog-->
 <h2>Login</h2>
 <form id="loginform">
-    <label>
-        <input type="text" name="username" />
-    </label>
-    <label>
-        <input type="password" name="password" />
-    </label>
+    <input type="text" name="username" />
+    <input type="password" name="password" />
     <input type="button" value="login" id="login"/>
 </form>
 
-<!--functies bedoeld voor een eigenaar-->
+
 <h2>Voor een eigenaar</h2>
     <li><a href="rest/aquaria">Bekijk eigen aquaria</a> </li>
-
 
 <h3>Aquarium verwijderen</h3>
 <form id="DELETEaquariumForm">
@@ -30,7 +24,7 @@
     <input type="button" id="deletename" value="Delete!"/>
 </form>
 
-
+<!--POST-->
 <h3>Aquarium maken</h3>
 <form id="POSTAquariumForm">
     <label for="aquariumname">aquarium naam:<input type="text" id="aquariumname" name="name"/></label><br>
@@ -45,14 +39,13 @@
 </form>
 
 
-<!--functies bedoeld voor een admin-->
 <h2>voor een admin</h2>
 
 <li><a href="rest/aquaria">Bekijk alle aquaria</a> </li>
 <li><a href="rest/eigenaren">Bekijk alle eigenaren</a> </li>
 
 
-<!--eigenaar aanpassen met put-->
+
 <h3>Eigenaar aanpassen</h3>
 <form id="PUTeigenaarForm">
     <label for="putid">Eigenaar id:<input type="text" id="putid" name="id"/></label>
@@ -60,15 +53,13 @@
     <input type="button" id="put" value="Put!"/>
 </form>
 
-<!--eigenaar aanpassen met patch-->
 <h3>Eigenaar aanpassen</h3>
 <form id="PATCHeigenaarForm">
     <label for="patchid">Eigenaar id:<input type="text" id="patchid" name="id"/></label>
     <label for="patchname">Eigenaar name:<input type="text" id="patchname" name="name"/></label>
-    <input type="button" id="pas aan" value="pas aan"/>
+    <input type="button" id="patch" value="Pas aan"/>
 </form>
 
-<!--eigenaar verwijderen werkt alleen voor een admin-->
 <h3>Eigenaar verwijderen</h3>
 <form id="DELETEeigenaarForm">
     <label for="deleteid"> Eigenaar id:<input type="text" id="deleteid" name="id"/></label>
@@ -97,7 +88,6 @@
     }
     document.querySelector("#login").addEventListener("click", login);
 
-
     //verwijderd een aquarium
     document.querySelector("#delete").addEventListener("click", function() {
         var id = document.querySelector("#deleteid").value;
@@ -121,6 +111,12 @@
                 }
             }).catch(error => console.log(error))
     });
+
+
+
+
+
+
 
 
 
@@ -188,7 +184,6 @@
             });
     });
 
-    // wijzigt de eigenaar
     document.querySelector("#patch").addEventListener("click", function() {
         var id = document.querySelector("#patchid").value;
         var formData = new FormData(document.querySelector("#PATCHeigenaarForm"));
